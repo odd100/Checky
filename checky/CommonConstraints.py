@@ -5,20 +5,20 @@ class CMethod(ContainerConstraint):
 
     def __init__(self,name,argcount=None):
         def check_method(obj):
-                    if not internal__has__function(obj,name):
-                        return False
-                    if argcount == None:
-                        return True
-                    if internal__check__if__builtin(obj):
-                        return True
-                    else:
-                        return internal__num__args(obj) == argcount + 1
+            if not internal__has__function(obj,name):
+                return False
+            elif argcount == None:
+                return True
+            elif internal__check__if__builtin(obj.__getattribute__(name)):
+                return True
+            else:
+                return internal__num__args(obj.__getattribute__(name)) == (argcount + 1)
         super(CMethod,self).__init__(check_method)
         self._name = name
         self._argcount = argcount
 
     def __str__(self):
-        if self._argcount == None:
+        if self._argcount != None:
             return "Method constraint : `{}` with {} arguments".format(self._name,self._argcount)
         else:
             return "Method constraint: `{}`".format(self._name)
@@ -99,7 +99,7 @@ class CAttribute(ContainerConstraint):
             super(CAttribute,self).__init__(lambda x: aname in dir(x) and isinstance(x.__getattribute__(aname),atype))
         else:
             super(CAttribute,self).__init__(lambda x: aname in dir(x))
-        self._name = name
+        self._name = aname
         self._atype = atype
 
     def __str__(self):

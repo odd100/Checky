@@ -3,15 +3,16 @@ from Constraint import Constraint
 
 class ContainerConstraint(Constraint):
 
-    def __init__(self,func):
+    def __init__(self,func,subconstraint=None):
         super(ContainerConstraint,self).__init__(func)
-        self._subconstraint = None
+        self._subconstraint = subconstraint
 
     def _getContainedValue(self,x):
         raise NotImplementedError("Non-implemented Container Constraint")
 
-    def __mul__(self,other):
+    def __imul__(self,other):
         self._subconstraint = other
+        return self
 
     def __str__(self):
         return "Simple container constraint"
